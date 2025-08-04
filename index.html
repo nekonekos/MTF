@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>橙色卡片式布局</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #FF8C00;
+            --card-bg-light: rgba(255, 255, 255, 0.8);
+            --card-bg-dark: rgba(30, 30, 30, 0.8);
+            --text-light: #333;
+            --text-dark: #f0f0f0;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --border-radius: 16px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff9d00, #ff6a00);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background 0.5s ease;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #8a4b00, #5a2d00);
+            }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .title {
+            color: white;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--card-bg-light);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-icon {
+            background: rgba(255, 140, 0, 0.2);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .card-icon i {
+            font-size: 32px;
+            color: var(--primary-color);
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .card-content {
+            color: var(--text-light);
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .card-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            align-self: flex-start;
+            margin-top: 10px;
+        }
+
+        .card-button:hover {
+            background: #e67e00;
+        }
+
+        .featured-card {
+            grid-column: span 2;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 40px;
+            gap: 30px;
+        }
+
+        .featured-content {
+            flex: 1;
+        }
+
+        .featured-image {
+            flex: 1;
+            height: 250px;
+            border-radius: var(--border-radius);
+            background: linear-gradient(45deg, #ff9d00, #ff6a00);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .featured-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            z-index: 100;
+        }
+
+        .theme-toggle i {
+            font-size: 24px;
+            color: white;
+        }
+
+        /* 深色模式样式 */
+        @media (prefers-color-scheme: dark) {
+            .card {
+                background: var(--card-bg-dark);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .card-title, .card-content {
+                color: var(--text-dark);
+            }
+
+            .card-icon {
+                background: rgba(255, 140, 0, 0.3);
+            }
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 900px) {
+            .featured-card {
+                grid-column: span 1;
+                flex-direction: column;
+            }
+            
+            .title {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .title {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card {
+                padding: 25px;
+            }
+        }
+
+        .footer {
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="title">橙色卡片式设计</h1>
+            <p class="subtitle">现代响应式布局，完美适配移动端和深色模式，提供出色的用户体验</p>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h2 class="card-title">创新设计</h2>
+                <p class="card-content">我们的卡片式布局采用最新的设计理念，结合磨砂玻璃效果和生动的橙色主题，为用户带来独特的视觉体验。</p>
+                <button class="card-button">了解更多</button>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h2 class="card-title">响应式布局</h2>
+                <p class="card-content">无论您使用手机、平板还是桌面设备，我们的设计都能完美适配各种屏幕尺寸，提供一致的用户体验。</p>
+                <button class="card-button">查看演示</button>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <h2 class="card-title">深色模式</h2>
+                <p class="card-content">我们精心设计的深色模式不仅减轻眼睛疲劳，还保持了橙色的活力感，让夜间浏览更加舒适。</p>
+                <button class="card-button">切换模式</button>
+            </div>
+
+            <div class="card featured-card">
+                <div class="featured-content">
+                    <h2 class="card-title">特色卡片</h2>
+                    <p class="card-content">这个特殊卡片采用了更大的布局空间，展示更丰富的内容。它使用了相同的磨砂玻璃效果，但在视觉上更加突出，吸引用户的注意力。</p>
+                    <p class="card-content">在移动设备上，它会自动调整为单列布局，确保阅读体验不受影响。</p>
+                    <button class="card-button">探索更多</button>
+                </div>
+                <div class="featured-image">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; background: linear-gradient(45deg, #ff9d00, #ff6a00); color: white; font-size: 1.5rem; font-weight: bold;">
+                        特色图片区域
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h2 class="card-title">极速性能</h2>
+                <p class="card-content">我们优化了所有代码和资源，确保您的网站加载迅速，即使在较慢的网络环境下也能提供流畅的体验。</p>
+                <button class="card-button">性能测试</button>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h2 class="card-title">安全保障</h2>
+                <p class="card-content">我们采用最新的安全标准保护您的数据和隐私，确保您的信息不会落入他人之手。</p>
+                <button class="card-button">安全指南</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2023 橙色卡片式布局 | 设计响应式网站 | 适配深色模式</p>
+    </div>
+
+    <script>
+        // 主题切换功能
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        themeToggle.addEventListener('click', () => {
+            // 切换图标
+            if (themeIcon.classList.contains('fa-moon')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                document.documentElement.style.setProperty('--card-bg-light', 'rgba(30, 30, 30, 0.8)');
+                document.documentElement.style.setProperty('--text-light', '#f0f0f0');
+                document.body.style.background = 'linear-gradient(135deg, #8a4b00, #5a2d00)';
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                document.documentElement.style.setProperty('--card-bg-light', 'rgba(255, 255, 255, 0.8)');
+                document.documentElement.style.setProperty('--text-light', '#333');
+                document.body.style.background = 'linear-gradient(135deg, #ff9d00, #ff6a00)';
+            }
+        });
+    </script>
+</body>
+</html>
